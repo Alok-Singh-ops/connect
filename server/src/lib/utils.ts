@@ -18,7 +18,6 @@ export function getUserEmailFromToken(token: string | undefined): string | null 
 
 export async function getUserByEmail(email: string | null) {
   if (!email) throw new NoUserError("User not authenticated");
-  console.log(email,"email");
   const user = await prismaClient.user.findUnique({ where: { email } });
   if (!user) throw new NoUserError("User does not exist");
   return user;
