@@ -24,7 +24,7 @@ class UserController {
     const { email, password } = req.body;
     try {
       await UserSchema.parseAsync({ email, password });
-      
+
       const hashedPassword = await bcrypt.hash(password, 8);
       await prismaClient.user.create({
         data: {
@@ -45,7 +45,6 @@ class UserController {
     const { email, password } = req.body;
     try {
       await UserSchema.parseAsync({ email, password });
-
       const user = await getUserByEmail(email);
       const isPasswordMatch = await bcrypt.compare(password, user.password);
       if (!isPasswordMatch) {

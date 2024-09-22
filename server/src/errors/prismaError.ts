@@ -13,7 +13,6 @@ export const handlePrismaError = (
       message: "Unique constraint failed: This email is already in use.",
     });
   }
-
   // Handle other Prisma errors if needed
   return res.status(500).json({
     code: err.code,
