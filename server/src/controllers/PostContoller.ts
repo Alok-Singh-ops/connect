@@ -60,6 +60,7 @@ class PostController {
     }
     try {
       const user = await getUserByEmail(email);
+      console.log(user,"user");
       const posts = await prismaClient.post.findMany({
         where: {
           userId: user.id,
