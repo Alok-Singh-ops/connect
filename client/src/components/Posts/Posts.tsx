@@ -1,7 +1,7 @@
 import useGetEmailFromToken from "@/hooks/useGetEmail";
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { SinglePost } from "../SinglePost/SinglePost";
+import { API } from "@/api/api";
 
 export interface IPost{
   id: string;
@@ -21,14 +21,10 @@ const Posts = () => {
     const getPosts = async () => {
       if (!email || !token) return; // Ensure email and token are available before making the request
       try {
-        const response = await axios.post(
-          "http://localhost:8080/post/getPosts",
+        const response = await API.post(
+          "/post/getPosts",
           { email },
-          {
-            headers: {
-              authorization: `Bearer ${token}`,
-            },
-          }
+
         );
         setData(response.data); // Update state with the fetched posts
         console.log(response.data);

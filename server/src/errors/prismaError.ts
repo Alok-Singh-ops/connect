@@ -16,6 +16,7 @@ export const handlePrismaError = (
 
   // Handle other Prisma errors if needed
   return res.status(500).json({
+    code: err.code,
     message: "Prisma error occurred",
   });
 };

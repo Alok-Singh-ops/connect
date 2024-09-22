@@ -29,5 +29,4 @@ model Post {
   userId         Int
   user           User   @relation(fields: [userId], references: [id])
   likesCount     Int
-  likedUserEmail String[]
 }

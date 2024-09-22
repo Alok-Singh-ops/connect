@@ -4,7 +4,7 @@ import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 const Register = () => {
   const navigate = useNavigate();
-  const [isSubmitting, setIsSubmitting] = React.useState(false);
+  const [isSubmitting] = React.useState(false);
   const [formData, setFormData] = React.useState({
     firstName: "",
     lastName: "",
