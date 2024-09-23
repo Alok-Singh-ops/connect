@@ -65,33 +65,59 @@ class PostController {
           userId: user.id,
         },
       });
-      console.log(posts,"postss");
       return res.status(200).json(posts);
     } catch (error) {
       handleError(error, res);
     }
   }
 
-  public async likePost(req: Request, res: Response) {
-    const { postId } = req.body;
-    try {
-      await prismaClient.post.update({
-        where: {
-          id: postId,
+public async likePost(req: Request, res: Response) {
+  const { postId, userId } = req.body; // Assuming userId is sent in the request
+  try {
+    // Check if the user has already liked the post
+    const existingLike = await prismaClient.like.findUnique({
+      where: {
+        userId_postId: {
+          userId: userId,
+          postId: postId,
         },
-        data: {
-          likesCount: {
-            increment: 1,
-          },
-        },
+      },
+    });
+
+    if (existingLike) {
+      return res.status(400).json({
+        message: "You have already liked this post.",
       });
-      res.status(200).json({
-        message: "Post liked Successfully",
-      });
-    } catch (error) {
-      handleError(error, res);
     }
+
+    // Create a new entry in the Like table
+    await prismaClient.like.create({
+      data: {
+        postId: postId,
+        userId: userId,
+      },
+    });
+
+    // Increment the likes count in the Post table
+    await prismaClient.post.update({
+      where: {
+        id: postId,
+      },
+      data: {
+        likesCount: {
+          increment: 1,
+        },
+      },
+    });
+
+    res.status(200).json({
+      message: "Post liked successfully",
+    });
+  } catch (error) {
+    handleError(error, res);
   }
+}
+
 
   public async dislikePost(req: Request, res: Response) {
     const { postId } = req.body;
