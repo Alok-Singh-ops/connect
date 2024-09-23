@@ -36,6 +36,7 @@ export function CreatePost() {
       // Reset the form after successful submission
       setCaption("");
       setFile(null);
+      window.location.reload();
     } catch (error) {
       console.error("Error creating post:", error);
       setError("Failed to create post. Please try again.");

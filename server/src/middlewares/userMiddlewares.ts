@@ -8,6 +8,8 @@ export const userMiddlewares = async (req:Request,res:Response,next: NextFunctio
       message: "Please provide valid token.",
     });
   }
+
+ 
   const decodedToken = jwt.decode(token) as { email: string };
   try {
     const user = await prismaClient.user.findUnique({

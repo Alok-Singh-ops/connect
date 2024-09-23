@@ -50,8 +50,8 @@ class UserController {
       if (!isPasswordMatch) {
         throw new PasswordNotMatchedError("Invalid password, please try again");
       }
-
-      const token = jwt.sign({ email }, envVariables.JWT_SECRET || "", {
+      console.log(user.id,"user.id");
+      const token = jwt.sign({ email,userId: user.id  }, envVariables.JWT_SECRET || "", {
         expiresIn: "1h",
       });
 

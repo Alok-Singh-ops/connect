@@ -8,13 +8,15 @@ const useGetEmailFromToken = () => {
   }
 
   try {
-    const decodedToken = jwtDecode<{ email: string }>(token); // Ensure proper typing for the decoded token
+    const decodedToken = jwtDecode<{ email: string,userId: string }>(token); // Ensure proper typing for the decoded token
     if (!decodedToken || !decodedToken.email) {
       return null; // Handle case where token does not contain email
     }
+    console.log(decodedToken,"decodedToken");
 
     return {
       email: decodedToken.email,
+      userId: decodedToken.userId,
       token: token
     };
   } catch (error) {

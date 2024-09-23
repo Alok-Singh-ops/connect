@@ -24,20 +24,22 @@ model User {
 }
 
 model Post {
-  id             Int    @id @default(autoincrement())
-  caption        String
-  postLink       String
-  userId         Int
-  user           User   @relation(fields: [userId], references: [id])
-  likesCount     Int
-  likes          Like[]
+  id         Int      @id @default(autoincrement())
+  caption    String
+  postLink   String
+  userId     Int
+  user       User     @relation(fields: [userId], references: [id])
+  likesCount Int
+  likes      Like[]
+  createdAt  DateTime @default(now())
 }
 
 model Like {
-  id      Int  @id @default(autoincrement())
-  userId  Int
-  postId  Int
-  user    User @relation(fields: [userId], references: [id])
-  post    Post @relation(fields: [postId], references: [id])
-   @@unique([userId, postId]) // Composite unique constraint
+  id     Int  @id @default(autoincrement())
+  userId Int
+  postId Int
+  user   User @relation(fields: [userId], references: [id])
+  post   Post @relation(fields: [postId], references: [id])
+
+  @@unique([userId, postId]) // Composite unique constraint
 }

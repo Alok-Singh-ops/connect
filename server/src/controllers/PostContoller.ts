@@ -53,23 +53,42 @@ class PostController {
   public async getPost(req: Request, res: Response) {
     const { email } = req.body;
     if (!email) {
-      res.send(400).json({
+      return res.status(400).json({
         message: "Email is required",
       });
-      return;
     }
+  
     try {
+      // Fetch the user based on email
       const user = await getUserByEmail(email);
+  
+      // Fetch all posts created by the user
       const posts = await prismaClient.post.findMany({
         where: {
           userId: user.id,
         },
+        include: {
+          likes: {
+            where: {
+              userId: user.id, // Check if the post is liked by the requesting user
+            },
+          },
+        },
       });
-      return res.status(200).json(posts);
+  
+      // Map posts to include whether the user has liked each post
+      const postsWithLikes = posts.map((post) => ({
+        ...post,
+        hasLiked: post.likes.length > 0, // If the post has likes by the user
+      }));
+  
+      // Return the posts with the 'hasLiked' field
+      return res.status(200).json(postsWithLikes);
     } catch (error) {
       handleError(error, res);
     }
   }
+  
 
 public async likePost(req: Request, res: Response) {
   const { postId, userId } = req.body; // Assuming userId is sent in the request
@@ -78,8 +97,8 @@ public async likePost(req: Request, res: Response) {
     const existingLike = await prismaClient.like.findUnique({
       where: {
         userId_postId: {
-          userId: userId,
-          postId: postId,
+          userId,
+          postId,
         },
       },
     });

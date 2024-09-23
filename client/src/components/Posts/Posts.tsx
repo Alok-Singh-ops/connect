@@ -8,6 +8,7 @@ export interface IPost{
   caption: string;
   postLink: string;
   likesCount: number;
+  hasLiked: boolean;
 }
 
 const Posts = () => {
@@ -16,6 +17,7 @@ const Posts = () => {
   // Destructure only if userData is not null
   const email = userData?.email;
   const token = userData?.token;
+  const userId = userData?.userId
 
   useEffect(() => {
     const getPosts = async () => {
@@ -24,7 +26,11 @@ const Posts = () => {
         const response = await API.post(
           "/post/getPosts",
           { email },
-
+          {
+            headers: {
+              authorization: `Bearer ${token}`,
+            },
+          }
         );
         setData(response.data); // Update state with the fetched posts
         console.log(response.data);
@@ -42,7 +48,9 @@ const Posts = () => {
       <div className="flex justify-center gap-8 flex-wrap">
       {data.length > 0 ? (
         data.map((post:IPost) => 
-        <SinglePost key={post.id} post={post} />)
+        <SinglePost key={post.id} post={post}
+        userId={userId}
+        />)
       ) : (
         <p>No posts available</p>
       )}
