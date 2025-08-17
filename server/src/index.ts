@@ -10,7 +10,7 @@ const PORT = process.env.PORT || 8080;
 // Apply necessary middlewares
 app.use(cors()); // Apply CORS
 app.use(express.json()); // Parse JSON bodies
-app.use(express.urlencoded({ extended: true })); // Parse URL-encoded bodies
+app.use(express.urlencoded({ extended: true })); // Parse URL-encoded bodiess
 
 
 const startServer = async () => {
